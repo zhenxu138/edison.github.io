@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zhenxu138.github.io/edison.github.io</id>
     <title>edison&apos;s blog</title>
-    <updated>2021-10-14T10:35:20.928Z</updated>
+    <updated>2021-10-14T10:59:02.340Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zhenxu138.github.io/edison.github.io"/>
     <link rel="self" href="https://zhenxu138.github.io/edison.github.io/atom.xml"/>
@@ -10,6 +10,16 @@
     <logo>https://zhenxu138.github.io/edison.github.io/images/avatar.png</logo>
     <icon>https://zhenxu138.github.io/edison.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, edison&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[算法-二分查找]]></title>
+        <id>https://zhenxu138.github.io/edison.github.io/post/suan-fa-er-fen-cha-zhao/</id>
+        <link href="https://zhenxu138.github.io/edison.github.io/post/suan-fa-er-fen-cha-zhao/">
+        </link>
+        <updated>2021-10-14T10:37:06.000Z</updated>
+        <content type="html"><![CDATA[<p>1.思路</p>
+<p>2.解题步骤</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[算法-分治法]]></title>
         <id>https://zhenxu138.github.io/edison.github.io/post/suan-fa-fen-zhi-fa/</id>
