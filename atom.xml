@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zhenxu138.github.io/edison.github.io</id>
     <title>edison&apos;s blog</title>
-    <updated>2021-10-14T10:20:42.913Z</updated>
+    <updated>2021-10-14T10:27:44.790Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zhenxu138.github.io/edison.github.io"/>
     <link rel="self" href="https://zhenxu138.github.io/edison.github.io/atom.xml"/>
@@ -10,6 +10,16 @@
     <logo>https://zhenxu138.github.io/edison.github.io/images/avatar.png</logo>
     <icon>https://zhenxu138.github.io/edison.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, edison&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[go并发模型]]></title>
+        <id>https://zhenxu138.github.io/edison.github.io/post/go-bing-fa-mo-xing/</id>
+        <link href="https://zhenxu138.github.io/edison.github.io/post/go-bing-fa-mo-xing/">
+        </link>
+        <updated>2021-10-14T10:21:27.000Z</updated>
+        <content type="html"><![CDATA[<p>并发所需要的组件</p>
+<p>并发的需求</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[数据库学习-SORM组件学习]]></title>
         <id>https://zhenxu138.github.io/edison.github.io/post/shu-ju-ku-xue-xi-sorm-zu-jian-xue-xi/</id>
@@ -455,10 +465,7 @@ git push origin personal
         <link href="https://zhenxu138.github.io/edison.github.io/post/hello-gridea/">
         </link>
         <updated>2018-12-11T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>✍️  <strong>Gridea</strong>本人博客用来记录个人的生活、心情、知识、笔记、创意... ...</p>
-]]></summary>
         <content type="html"><![CDATA[<p>✍️  <strong>Gridea</strong>本人博客用来记录个人的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
 <p><a href="https://github.com/getgridea/gridea">Github</a></p>
 <h2 id="内容包括">内容包括👇</h2>
 <p>📝</p>
