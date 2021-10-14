@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zhenxu138.github.io/edison.github.io</id>
-    <title>Gridea</title>
-    <updated>2021-10-14T07:10:59.665Z</updated>
+    <title>edison&apos;s blog</title>
+    <updated>2021-10-14T07:17:38.554Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zhenxu138.github.io/edison.github.io"/>
     <link rel="self" href="https://zhenxu138.github.io/edison.github.io/atom.xml"/>
-    <subtitle>温故而知新</subtitle>
+    <subtitle>lazy man daily context</subtitle>
     <logo>https://zhenxu138.github.io/edison.github.io/images/avatar.png</logo>
     <icon>https://zhenxu138.github.io/edison.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2021, Gridea</rights>
+    <rights>All rights reserved 2021, edison&apos;s blog</rights>
     <entry>
         <title type="html"><![CDATA[Hello Gridea]]></title>
         <id>https://zhenxu138.github.io/edison.github.io/post/hello-gridea/</id>
