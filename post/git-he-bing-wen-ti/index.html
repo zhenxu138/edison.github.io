@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Git合并问题 | edison&#39;s blog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://zhenxu138.github.io/edison.github.io/favicon.ico?v=1634202106395">
+<link rel="stylesheet" href="https://zhenxu138.github.io/edison.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="1.新建仓库
+先创建project，再创建文件。
+Git global setup
+git config --global user.name &quot;zhengxurui&quot;
+git config --global user...." />
+    <meta name="keywords" content="Git" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://zhenxu138.github.io/edison.github.io">
+        <img src="https://zhenxu138.github.io/edison.github.io/images/avatar.png?v=1634202106395" class="site-logo">
+        <h1 class="site-title">edison&#39;s blog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      lazy man daily context
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">gridea</a> | <a class="rss" href="https://zhenxu138.github.io/edison.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Git合并问题</h2>
+            <div class="post-date">2021-10-14</div>
+            
+            <div class="post-content" v-pre>
+              <p>1.新建仓库<br>
+先创建project，再创建文件。</p>
+<h5 id="git-global-setup">Git global setup</h5>
+<pre><code>git config --global user.name &quot;zhengxurui&quot;
+git config --global user.email &quot;zhengxurui@qianxin.com&quot;
+</code></pre>
+<h5 id="create-a-new-repository">Create a new repository</h5>
+<pre><code>git clone git@git-open.qianxin-inc.cn:free/zhengxurui/sorm-demo.git
+cd sorm-demo
+touch README.md
+git add README.md
+git commit -m &quot;add README&quot;
+git push -u origin master
+</code></pre>
+<h5 id="push-an-existing-folder">Push an existing folder</h5>
+<pre><code>cd existing_folder
+git init
+git remote add origin git@git-open.qianxin-inc.cn:free/zhengxurui/sorm-demo.git
+git add .
+git commit -m &quot;Initial commit&quot;
+git push -u origin master
+</code></pre>
+<h5 id="push-an-existing-git-repository">Push an existing Git repository</h5>
+<pre><code>cd existing_repo
+git remote rename origin old-origin
+git remote add origin git@git-open.qianxin-inc.cn:free/zhengxurui/sorm-demo.git
+git push -u origin --all
+git push -u origin --tags
+</code></pre>
+<p>2.更新代码<br>
+1.进行这个步骤之前要完成前面的步骤<br>
+2.关联到远程仓库：git remote add origin 地址<br>
+3.将远程库与本地同步合并：git pull --rebase origin<br>
+4.将本地库的内容推送到远程，使用git push 命令：git push -u origin</p>
+<p>3.删除数据<br>
+$ git pull origin master  # 将远程仓库里面的项目拉下来<br>
+$ dir # 查看有哪些文件夹<br>
+$ git rm -r --cached target  # 删除你要删除的文件名称，这里是删除target文件夹（cached不会把本地的flashview文件夹删除）<br>
+$ git commit -m '删除了target' # 提交,添加操作说明<br>
+git push -u origin master #重新提交（若需要对其他分支进行操作，则把master换为对应分支，如:git push -u origin dev）</p>
+<p>4.克隆分支，并新建分支</p>
+<ol>
+<li>克隆远程master仓库的某一个分支</li>
+</ol>
+<pre><code class="language-bash">git clone -b &lt;指定分支名&gt; &lt;远程仓库地址&gt;
+git clone -b master git@......(url)
+</code></pre>
+<ol start="2">
+<li>本地切换并新建分支</li>
+</ol>
+<pre><code class="language-bash">git checkout -b &lt;本地分支名&gt;
+git checkout -b personal
+</code></pre>
+<ol start="3">
+<li>添加远程主机名为personal的分支</li>
+</ol>
+<pre><code class="language-bash">git remote add &lt;远程主机名&gt; &lt;git地址&gt;
+git remote add personal git@......(url)
+</code></pre>
+<ol start="4">
+<li>将本地的personal内容传到个人分支上的personal</li>
+</ol>
+<pre><code class="language-bash">git add .
+git commit -m &quot;fritst&quot;
+git push &lt;远程主机名&gt;(remote的名字) &lt;本地分支名&gt;:&lt;远程分支名&gt;（远程真正创建的名字）
+git push origin personal
+</code></pre>
+<p>5.merge代码<br>
+1.pull代码到自己本地<br>
+2.如果有冲突，需要git stash将自己的代码存入缓存区。<br>
+3.然后再次pull远程代码到工作区间<br>
+4.git stash pop更新代码，手动解决冲突。<br>
+5.修改后再add commit push，完成代码更新。</p>
+<p>6.删除分支</p>
+<pre><code class="language-bash">git branch -D dev/pzqu2
+</code></pre>
+<p>删除远端分支</p>
+<pre><code class="language-bash">git push  origin --delete dev
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://zhenxu138.github.io/edison.github.io/tag/xz0lsC1fS/" class="tag">
+                    Git
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://zhenxu138.github.io/edison.github.io/post/hello-gridea/">
+                  <h3 class="post-title">
+                    Hello Gridea
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
