@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://zhenxu138.github.io/edison.github.io/favicon.ico?v=1634207859665">
+<link rel="shortcut icon" href="https://zhenxu138.github.io/edison.github.io/favicon.ico?v=1634294416430">
 <link rel="stylesheet" href="https://zhenxu138.github.io/edison.github.io/styles/main.css">
 
 
@@ -18,9 +18,14 @@
 
 
 
-    <meta name="description" content="并发所需要的组件
-并发的需求
-" />
+    <meta name="description" content="并发模型
+1.场景
+1.三个任务，A,B同时，C必须等到A,B完成后才能进行。
+解析：前两个并发，后一个等待。所以使用sync.WaitGroup
+	w :=sync.WaitGroup{}
+	w.Add(2)
+	go func() {
+	..." />
     <meta name="keywords" content="go" />
   </head>
   <body>
@@ -30,7 +35,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://zhenxu138.github.io/edison.github.io">
-        <img src="https://zhenxu138.github.io/edison.github.io/images/avatar.png?v=1634207859665" class="site-logo">
+        <img src="https://zhenxu138.github.io/edison.github.io/images/avatar.png?v=1634294416430" class="site-logo">
         <h1 class="site-title">edison&#39;s blog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -96,8 +101,248 @@
             <div class="post-date">2021-10-14</div>
             
             <div class="post-content" v-pre>
-              <p>并发所需要的组件</p>
-<p>并发的需求</p>
+              <h1 id="并发模型">并发模型</h1>
+<h1 id="1场景">1.场景</h1>
+<h5 id="1三个任务ab同时c必须等到ab完成后才能进行">1.三个任务，A,B同时，C必须等到A,B完成后才能进行。</h5>
+<p>解析：前两个并发，后一个等待。所以使用sync.WaitGroup</p>
+<pre><code class="language-go">	w :=sync.WaitGroup{}
+	w.Add(2)
+	go func() {
+		a()
+		w.Done()
+	}()
+	go func() {
+		b()
+		w.Done()
+	}()
+	w.Wait()
+	c()
+</code></pre>
+<p>注意点：done和wait要在外面环境执行</p>
+<p>知识点：sync.WaitGroup可以解决同步阻塞等待的问题。</p>
+<h5 id="2ab两个任务都需要执行x任务但不能同时做">2.A,B两个任务，都需要执行X任务，但不能同时做。</h5>
+<p>解析，两个并发任务，对一个资源信进行抢夺等待，所以要使用锁，sync.mutex。</p>
+<pre><code class="language-go">	m:=&amp;sync.Mutex{}
+	go func() {
+		a(m)
+	}()
+	go func() {
+		b(m)
+	}()
+	time.Sleep(time.Second*8)
+	
+func a(m *sync.Mutex)  {
+	fmt.Println(&quot;a is start&quot;)
+	m.Lock()
+	c(&quot;a is using c&quot;)
+	m.Unlock()
+	fmt.Println(&quot;a is done&quot;)
+}
+func b(m *sync.Mutex)  {
+	fmt.Println(&quot;b is start&quot;)
+	m.Lock()
+	c(&quot;b is using c&quot;)
+	m.Unlock()
+	fmt.Println(&quot;b is start&quot;)
+}
+func c(s string)  {
+	fmt.Println(s)
+	time.Sleep(4*time.Second)
+	fmt.Println(s)
+}
+</code></pre>
+<p>注意点：锁是指针类型，得传引用。</p>
+<p>知识点：sync.Mutex可以解决对资源同步问题。</p>
+<h5 id="3abc三个争夺资源xa做的时候bc不能做">3.ABC,三个争夺资源x.A做的时候，BC不能做。</h5>
+<p>解析：首先也是资源争夺，A做的时候上锁，其他对资源的争夺有限制，为读写锁。</p>
+<pre><code class="language-go">func a(m *sync.RWMutex)  {
+	fmt.Println(&quot;a is start&quot;)
+	m.Lock()
+	x(&quot;a is using x&quot;)
+	m.Unlock()
+	fmt.Println(&quot;a is done&quot;)
+}
+func b(m *sync.RWMutex)  {
+	fmt.Println(&quot;b is start&quot;)
+	m.RLock()
+	x(&quot;b is using x&quot;)
+	m.RUnlock()
+	fmt.Println(&quot;b is start&quot;)
+}
+func c(m *sync.RWMutex)  {
+	fmt.Println(&quot;c is start&quot;)
+	m.RLock()
+	x(&quot;c is using x&quot;)
+	m.RUnlock()
+	fmt.Println(&quot;c is start&quot;)
+}
+</code></pre>
+<p>注意点：如果控制几个方法对一个资源使用，需要对几个方法都使用锁，只是锁的类型不同。</p>
+<p>知识点：锁比读锁权限高。同一Rlock也是同时并发使用资源。</p>
+<h4 id="4ab两个任务b依赖a中的数据x">4.A,B两个任务，B依赖A中的数据x。</h4>
+<p>解析：两个并发中的数据同步问题。一般使用channel来同步并发数据。</p>
+<pre><code>	m:=make(chan int)
+	go func() {
+		a(m)
+	}()
+	go func() {
+		b(m)
+	}()
+func a(m chan&lt;- int)  {
+	fmt.Println(&quot;a is start&quot;)
+	time.Sleep(4*time.Second)
+	m&lt;- 1
+	fmt.Println(&quot;a is 1&quot;)
+}
+func b(m &lt;-chan int)  {
+	fmt.Println(&quot;b is start&quot;)
+	b:= &lt;- m
+	fmt.Println(&quot;b get a :&quot;,b)
+}
+</code></pre>
+<p>注意点：chan需要赋值，有内存地址，new一个。才能读取。</p>
+<p>知识点：channel使用要知道哪里结束，同步的时候，chan可以转换为只读和只写。</p>
+<h4 id="5一个任务有ab两个功能但是a功能不稳定超过3秒就结束方法退出方法">5.一个任务有A,B两个功能，但是A功能不稳定，超过3秒就结束方法，退出方法。</h4>
+<p>解析：因为两个功能，所以有数据同步，使用channel。有一个可以取消，所以可以定义个quit管道，专门处理异常退出。</p>
+<pre><code class="language-go">func A()  {
+	cancel:=time.After(3*time.Second)
+	done:=make(chan int)
+	go x(done)
+
+	select {
+	case &lt;-done:
+		fmt.Println(&quot;get data success!&quot;)
+		return
+	case &lt;-cancel:
+		fmt.Println(&quot;time out.&quot;)
+		return
+	}
+}
+func B()  {
+	fmt.Println(&quot;b is start&quot;)
+	time.Sleep(5*time.Second)
+	//b:= &lt;- m
+	fmt.Println(&quot;b get a &quot;)
+}
+func x(done chan int)  {
+	time.Sleep(4*time.Second)
+	done&lt;- 1
+	fmt.Println(&quot;x spend 4 seconds.&quot;)
+}
+</code></pre>
+<p>注意点：在A方法里，实现两个channel，一个设置时间超时，一个用来处理数据方法。再用select判断哪个可以执行。</p>
+<p>知识点：使用chan和select搭配来支持优雅的退出过程，退出的方法在写并发的时候一定要先确定好，保持系统稳定。</p>
+<h4 id="6一个工作需要处理n个a方法但是一次处理太多会导致效率问题所以设置每次只处理10个-使用有缓存的channel">6.一个工作需要处理N个A方法，但是一次处理太多会导致效率问题，所以设置每次只处理10个。使用有缓存的channel。</h4>
+<pre><code class="language-go">func A(i int) {
+    fmt.Println(&quot;task A &quot;, i)
+    time.Sleep(time.Second )
+}
+func main() {
+     done := make(chan int, 10)
+     for i := 0; i &lt; 100; i ++ {
+        go func(i int) {
+            done &lt;- 1
+            A(i)
+            &lt;-done
+        }(i)
+    }
+     time.Sleep(time.Minute)
+}
+或者
+func A(i chan int)  {
+	time.Sleep(4*time.Second)
+	fmt.Println(&quot;task i:&quot;,&lt;-i)
+}
+	done:=make(chan int,10)
+	for i:=0;i&lt;40;i++{
+		go func(i int) {
+			//fmt.Println(&quot;i:&quot;,i)
+			done&lt;- i
+			A(done)
+		}(i)
+	}
+</code></pre>
+<p>注意点：缓存的channel要最先定义，</p>
+<p>知识点：使用缓存可以控制并发量。</p>
+<h1 id="2并发模式">2.并发模式</h1>
+<h4 id="1生产者消费者模型">1.生产者，消费者模型</h4>
+<p>解析：就是两方解耦，一边生成数据，一边使用数据。使用有缓存的channel。</p>
+<pre><code class="language-go">	done:=make(chan int,10)
+
+	go A(done)
+	for i:=0;i&lt;40;i++ {
+		go B(done)
+	}
+func A(ch chan&lt;- int)  {
+	for i:=0;i&lt;40;i++{
+		ch&lt;-i*100
+		fmt.Println(&quot;task A:&quot;,i)
+        }
+}
+func B(ch &lt;-chan int)  {
+	temp:=&lt;-ch
+	time.Sleep(4*time.Second)
+	fmt.Println(&quot;task B:&quot;,temp)
+}
+</code></pre>
+<p>注意点：go 在for前面和for后面是有区别的，go for的话是串行，for go才是并行。</p>
+<p>知识点：一个产生，一个消费，channel作为缓存队列。</p>
+<h4 id="2发布订阅">2.发布订阅</h4>
+<p>解析：生产者和消费者是M:N的关系。在传统生产者和消费者模型中，是将消息发送到一个队列中，而发布订阅模型则是将消息发布给一个主题。</p>
+<p>每个订阅者就是增加一个channel，每次发主题就是消息就从channel里写数据。</p>
+<pre><code class="language-go">type (
+	subscriber chan interface{}		//订阅者为一个管道
+)
+
+type Publisher struct {
+	m sync.RWMutex
+	buffer int
+	timeout time.Duration
+	subscribers map[subscriber]string
+}
+
+//新建一个发布者
+func NewPublisher(Timeout time.Duration, buffer int) *Publisher {
+	return &amp;Publisher{
+		m: sync.RWMutex{},
+		buffer: buffer,
+		timeout: Timeout,
+		subscribers: map[subscriber]string{},
+	}
+}
+
+//订阅者订阅,就是增加map里的channel
+func (p *Publisher)subscrib(topic string) chan interface{} {
+	ch:=make(chan interface{},p.buffer)
+	p.subscribers[ch]= topic
+	return ch
+}
+
+//退出订阅,删除map里的channel
+func (p *Publisher)Evistsubscrib(sub chan interface{}) {
+	delete(p.subscribers,sub)
+	close(sub)
+}
+//发布主题
+func (p *Publisher)Publish(sub chan interface{}) {
+	wg:=sync.WaitGroup{}
+	for sub,topic:=range p.subscribers{
+		wg.Add(1)
+		go sendTopic(sub,topic,&amp;wg,p.timeout)
+	}
+	wg.Wait()
+}
+//发送主题
+func sendTopic(ch chan interface{},topic string,wg *sync.WaitGroup,duration time.Duration)  {
+	defer wg.Done()
+	select {
+	case ch&lt;-topic:
+	case &lt;-time.After(duration):
+	}
+}
+</code></pre>
+<h1 id="3答疑">3.答疑</h1>
+<p><strong>1.什么时候要选择关闭通道，遍历一个未关闭的channel会造成死循环.但只要没有goroutine持有channel，相关资源会自动释放</strong></p>
 
             </div>
             

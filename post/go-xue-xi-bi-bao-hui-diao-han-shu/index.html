@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Lazy man 个人博客 | edison&#39;s blog</title>
+<title>go学习-闭包、回调函数 | edison&#39;s blog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,23 +18,12 @@
 
 
 
-    <meta name="description" content="✍️  Gridea本人博客用来记录个人的生活、心情、知识、笔记、创意... ...
-Github
-内容包括👇
-📝
-🌉
-🏷️
-📋
-💻
-🌎
-💬
-🌁
-🖥
-🌱
-🏃
-😘 Enjoy~
-..." />
-    <meta name="keywords" content="Gridea" />
+    <meta name="description" content="1.匿名函数
+    //带参数的匿名函数
+    func(i, j int32) { //自动推导
+        fmt.Println(&quot;i= &quot;, i)
+        fmt.Println(&quot;j=..." />
+    <meta name="keywords" content="go" />
   </head>
   <body>
     <div id="app" class="main">
@@ -105,39 +94,74 @@ Github
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Lazy man 个人博客</h2>
-            <div class="post-date">2018-12-12</div>
-            
-              <div class="feature-container" style="background-image: url('https://zhenxu138.github.io/edison.github.io/post-images/hello-gridea.jpg')">
-              </div>
+            <h2 class="post-title">go学习-闭包、回调函数</h2>
+            <div class="post-date">2021-10-15</div>
             
             <div class="post-content" v-pre>
-              <p>✍️  <strong>Gridea</strong>本人博客用来记录个人的生活、心情、知识、笔记、创意... ...</p>
-<p><a href="https://github.com/getgridea/gridea">Github</a></p>
-<h2 id="内容包括">内容包括👇</h2>
-<p>📝</p>
-<p>🌉</p>
-<p>🏷️</p>
-<p>📋</p>
-<p>💻</p>
-<p>🌎</p>
-<p>💬</p>
-<p>🌁</p>
-<p>🖥</p>
-<p>🌱</p>
-<p>🏃</p>
-<p>😘 Enjoy~</p>
+              <h4 id="1匿名函数">1.匿名函数</h4>
+<pre><code class="language-go">    //带参数的匿名函数
+    func(i, j int32) { //自动推导
+        fmt.Println(&quot;i= &quot;, i)
+        fmt.Println(&quot;j= &quot;, j)
+    }(10, 20) //圆括号代表调用匿名函数
+</code></pre>
+<h4 id="2回调函数">2.回调函数</h4>
+<p>就是设置通用方法，提供一个接口，让使用外部去实现里面的具体方法。</p>
+<pre><code>type Callback func(x, y int) int
+
+// 提供一个接口，让外部去实现
+func test(x, y int, callback Callback) int {
+    return callback(x, y)
+}
+
+// 回调函数的具体实现
+func add(x, y int) int {
+    return x + y
+}
+
+func main() {
+    x, y := 1, 2
+    fmt.Println(test(x, y, add))
+}
+</code></pre>
+<h4 id="3闭包">3.闭包</h4>
+<p>就是将一个函数的返回值为另一个函数，则另一个函数里的变量值就不会释放，存货并独享状态会一直在缓存中。</p>
+<pre><code>func main() {
+    //res其实就是test1返回值函数,和之前匿名函数变量一个道理
+    res := test1()
+    fmt.Println(res()) //输出2
+    fmt.Println(res()) //输出3
+    fmt.Println(res()) //输出4
+}
+//注意此处,返回值类型是func int
+func test1() func() int {
+    i := 1
+    return func() int {
+        i = i + 1
+        return i
+    }
+}
+</code></pre>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://zhenxu138.github.io/edison.github.io/tag/gSIKYde7S/" class="tag">
-                    Gridea
+                  <a href="https://zhenxu138.github.io/edison.github.io/tag/XaqcQQ449/" class="tag">
+                    go
                   </a>
                 
               </div>
             
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://zhenxu138.github.io/edison.github.io/post/suan-fa-er-fen-cha-zhao/">
+                  <h3 class="post-title">
+                    算法-二分查找
+                  </h3>
+                </a>
+              </div>
             
 
             
